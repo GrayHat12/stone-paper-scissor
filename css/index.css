@@ -1,0 +1,18 @@
+main {
+    margin: auto;
+    width: fit-content;
+    margin-top: 20px;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+}
+.banner {
+    position: absolute;
+    top: 50vh;
+    left: 0px;
+    right: 0px;
+    background-color: sandybrown;
+    color: gray;
+    padding: 20px 0px;
+    text-align: center;
+}

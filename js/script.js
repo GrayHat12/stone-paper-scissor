@@ -2,7 +2,7 @@ const PLAY_BANNER = document.getElementById("play-banner");
 
 let game_started = false;
 
-let game = new Game(10);
+let game = new Game(20);
 
 function preload() {
     game.preload();
@@ -10,7 +10,7 @@ function preload() {
 
 function setup() {
     createCanvas(600, 600);
-    frameRate(40);
+    frameRate(60);
     game.setup();
 }
 

@@ -45,7 +45,7 @@ class Player {
         if (nearest_food) distance_from_food = dist(this.__x, this.__y, nearest_food.getX(), nearest_food.getY());
         if (nearest_foe) distance_from_foe = dist(this.__x, this.__y, nearest_foe.getX(), nearest_foe.getY());
 
-        let speed = 1;
+        let speed = 2;
         if (distance_from_food < distance_from_foe && nearest_food) {
             if (nearest_food.getX() > this.__x) x += speed;
             else if (nearest_food.getX() < this.__x) x -= speed;

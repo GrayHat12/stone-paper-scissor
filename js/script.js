@@ -35,7 +35,7 @@ function draw() {
 
 document.addEventListener("click", (ev) => {
     // console.log(ev.target.tagName);
-    if (ev.target.tagName == "CANVAS") {
+    if (ev.target.tagName == "CANVAS" || ev.target.id === "play-banner") {
         PLAY_BANNER.style.display = "none";
         game_started = true;
     }

@@ -15,10 +15,25 @@
         <script src="js/player.js"></script>
         <script src="js/script.js" defer></script>
         <script src="js/game.js"></script>
-        <link rel="stylesheet" href="css/index.css">
+        <link rel="stylesheet" href="css/index.css" />
     </head>
     <body>
-        <main></main>
+        <main>
+            <div class="sliders">
+                <div class="slider">
+                    <label>Stone Speed</label>
+                    <input id="stone-speed" value="1.2" step="0.1" type="range" min="0.5" max="2" />
+                </div>
+                <div class="slider">
+                    <label>Paper Speed</label>
+                    <input id="paper-speed" value="1.2" step="0.1" type="range" min="0.5" max="2" />
+                </div>
+                <div class="slider">
+                    <label>Scissor Speed</label>
+                    <input id="scissor-speed" value="1.2" step="0.1" type="range" min="0.5" max="2" />
+                </div>
+            </div>
+        </main>
         <div id="play-banner" class="banner">
             <h2>CLICK TO PLAY</h2>
         </div>

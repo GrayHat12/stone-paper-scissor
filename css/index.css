@@ -5,6 +5,15 @@ main {
     height: 100vh;
     display: flex;
     align-items: center;
+    flex-direction: column;
+    justify-content: center;
+}
+.sliders {
+    margin-bottom: 20px;
+    display: flex;
+}
+.slider > input, .slider > label {
+    display: block;
 }
 .banner {
     position: absolute;

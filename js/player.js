@@ -37,7 +37,7 @@ class Player {
         image(img, this.__x - 15, this.__y - 15, 30, 30);
     };
 
-    move = (nearest_food, nearest_foe) => {
+    move = (nearest_food, nearest_foe, speed) => {
         let distance_from_food = Infinity;
         let distance_from_foe = Infinity;
         let x = this.__x;
@@ -45,7 +45,6 @@ class Player {
         if (nearest_food) distance_from_food = dist(this.__x, this.__y, nearest_food.getX(), nearest_food.getY());
         if (nearest_foe) distance_from_foe = dist(this.__x, this.__y, nearest_foe.getX(), nearest_foe.getY());
 
-        let speed = 2;
         if (distance_from_food < distance_from_foe && nearest_food) {
             if (nearest_food.getX() > this.__x) x += speed;
             else if (nearest_food.getX() < this.__x) x -= speed;
@@ -59,8 +58,8 @@ class Player {
         }
         if (x == Infinity || x == NaN) x = this.__x;
         if (y == Infinity || y == NaN) y = this.__y;
-        x += (Math.random() < 0.5 ? -1 : 1) * (Math.random());
-        y += (Math.random() < 0.5 ? -1 : 1) * (Math.random());
+        x += (Math.random() < 0.5 ? -1 : 1) * (Math.random() * speed);
+        y += (Math.random() < 0.5 ? -1 : 1) * (Math.random() * speed);
         return {x, y}
     };
 }

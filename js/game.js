@@ -37,8 +37,23 @@ class Game {
             stone.setup();
         });
     };
+    gameOverCheck = () => {
+        let counts = [this.papers.length, this.scissors.length, this.stones.length];
+        let winner = ["Paper", "Scissor", "Stone"];
+        let zeroCount = 0;
+        let nonZeroIndex = -1;
+        counts.forEach((x, i) => {
+            if (x === 0) zeroCount += 1;
+            else nonZeroIndex = i;
+        });
+        return {
+            over: zeroCount === 2,
+            winner: zeroCount === 2 ? winner[nonZeroIndex] : null
+        };
+    }
     draw = () => {
         this.iteration();
+        let {over, winner} = this.gameOverCheck();
         this.papers.forEach((paper) => {
             paper.draw(this.paper_image);
         });
@@ -48,6 +63,9 @@ class Game {
         this.stones.forEach((stone) => {
             stone.draw(this.stone_image);
         });
+        if (over) {
+            text(`${winner} WON`, 250, 40);
+        }
         text(`STONE: ${this.stones.length} | PAPER: ${this.papers.length} | SCISSOR: ${this.scissors.length}`, 190, 20);
     };
     preload = () => {
@@ -75,11 +93,11 @@ class Game {
                               : prev;
                       })
                     : null;
-            let { x, y } = paper.move(near_food, near_foe);
-            let existing_paper = array.find((p) => p !== paper && dist(p.getX(), p.getY(), x, y) < 15);
+            let { x, y } = paper.move(near_food, near_foe, PAPER_SPEED || 1.2);
+            let existing_paper = array.find((p) => p !== paper && dist(p.getX(), p.getY(), x, y) < 20);
             if (
                 !existing_paper ||
-                (near_food && dist(near_food.getX(), near_food.getY(), paper.getX(), paper.getY() < 5)) ||
+                // (near_food && dist(near_food.getX(), near_food.getY(), paper.getX(), paper.getY() < 5)) ||
                 dist(existing_paper.getX(), existing_paper.getY(), x, y) >
                     dist(paper.getX(), paper.getY(), existing_paper.getX(), existing_paper.getY())
             ) {
@@ -106,11 +124,11 @@ class Game {
                               : prev;
                       })
                     : null;
-            let { x, y } = scissor.move(near_food, near_foe);
-            let existing_scissor = array.find((s) => s !== scissor && dist(s.getX(), s.getY(), x, y) < 15);
+            let { x, y } = scissor.move(near_food, near_foe, SCISSOR_SPEED || 1.2);
+            let existing_scissor = array.find((s) => s !== scissor && dist(s.getX(), s.getY(), x, y) < 20);
             if (
                 !existing_scissor ||
-                (near_food && dist(near_food.getX(), near_food.getY(), scissor.getX(), scissor.getY() < 5)) ||
+                // (near_food && dist(near_food.getX(), near_food.getY(), scissor.getX(), scissor.getY() < 5)) ||
                 dist(existing_scissor.getX(), existing_scissor.getY(), x, y) >
                     dist(scissor.getX(), scissor.getY(), existing_scissor.getX(), existing_scissor.getY())
             ) {
@@ -122,7 +140,8 @@ class Game {
             let near_food =
                 this.scissors.length > 0
                     ? this.scissors.reduce((prev, curr) => {
-                          return dist(curr.getX(), curr.getY(), stone.getX(), stone.getY()) < dist(prev.getX(), prev.getY(), stone.getX(), stone.getY())
+                          return dist(curr.getX(), curr.getY(), stone.getX(), stone.getY()) <
+                              dist(prev.getX(), prev.getY(), stone.getX(), stone.getY())
                               ? curr
                               : prev;
                       })
@@ -130,16 +149,17 @@ class Game {
             let near_foe =
                 this.papers.length > 0
                     ? this.papers.reduce((prev, curr) => {
-                          return dist(curr.getX(), curr.getY(), stone.getX(), stone.getY()) < dist(prev.getX(), prev.getY(), stone.getX(), stone.getY())
+                          return dist(curr.getX(), curr.getY(), stone.getX(), stone.getY()) <
+                              dist(prev.getX(), prev.getY(), stone.getX(), stone.getY())
                               ? curr
                               : prev;
                       })
                     : null;
-            let { x, y } = stone.move(near_food, near_foe);
-            let existing_stone = this.stones.find((s) => s !== stone && dist(s.getX(), s.getY(), x, y) < 15);
+            let { x, y } = stone.move(near_food, near_foe, STONE_SPEED || 1.2);
+            let existing_stone = this.stones.find((s) => s !== stone && dist(s.getX(), s.getY(), x, y) < 20);
             if (
                 !existing_stone ||
-                (near_food && dist(near_food.getX(), near_food.getY(), stone.getX(), stone.y < 2)) ||
+                // (near_food && dist(near_food.getX(), near_food.getY(), stone.getX(), stone.y < 2)) ||
                 dist(existing_stone.getX(), existing_stone.getY(), stone.getX(), stone.getY()) <
                     dist(existing_stone.getX(), existing_stone.getY(), x, y)
             ) {
@@ -153,7 +173,7 @@ class Game {
 
         // check for collisions
         this.papers.forEach((paper) => {
-            let dead = this.stones.find((x) => dist(x.getX(), x.getY(), paper.getX(), paper.getY()) < 5);
+            let dead = this.stones.find((x) => dist(x.getX(), x.getY(), paper.getX(), paper.getY()) < 20);
             if (dead) {
                 this.papers.push(new Player(dead.getX(), dead.getY()));
                 PAPER_SOUND.play();
@@ -161,7 +181,7 @@ class Game {
             }
         });
         this.scissors.forEach((scissor) => {
-            let dead = this.papers.find((x) => dist(x.getX(), x.getY(), scissor.getX(), scissor.getY()) < 5);
+            let dead = this.papers.find((x) => dist(x.getX(), x.getY(), scissor.getX(), scissor.getY()) < 20);
             if (dead) {
                 this.scissors.push(new Player(dead.getX(), dead.getY()));
                 SCISSOR_SOUND.play();
@@ -169,7 +189,7 @@ class Game {
             }
         });
         this.stones.forEach((stone) => {
-            let dead = this.scissors.find((x) => dist(x.getX(), x.getY(), stone.getX(), stone.getY()) < 5);
+            let dead = this.scissors.find((x) => dist(x.getX(), x.getY(), stone.getX(), stone.getY()) < 20);
             if (dead) {
                 this.stones.push(new Player(dead.getX(), dead.getY()));
                 STONE_SOUND.play();
